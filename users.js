@@ -1,4 +1,4 @@
-import trimString from '../utils/trimString.js'
+const { trimString } = require('./utils')
 
 const users = [
    {
@@ -18,9 +18,8 @@ function addUser(user) {
          name: userName,
          room: roomName,
       })
-	}
-	return users
-	
+   }
+   return users
 }
 
 module.exports = {

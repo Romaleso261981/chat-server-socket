@@ -4,6 +4,7 @@ const socketIo = require('socket.io')
 const cors = require('cors')
 const app = express()
 const port = 3000
+const { addUser, removeUser, getUser, getUsersInRoom } = require('./users')
 
 const router = require('./routes')
 
@@ -29,23 +30,24 @@ const io = socketIo(server, {
 
 io.on('connection', socket => {
    socket.on('join', ({ name, room }) => {
-		socket.join(room)
-		
-		const users = addUser({ name, room })
+      socket.join(room)
+      if (!name || !room) return socket.emit('error', { message: 'name and room are required' })
 
-		socket.emit('message', {
-			data: {
-				user: 'admin',
-				message: `${name}, welcome to room ${room}`
-			}
-		})
-	})
-	
-	socket.broadcast.to(user.room).emit('message', {
-		data: {
-			user: 'admin', message: `${user.name} has joined!`
-		}
-	})
+      const user = addUser({ name, room })
+
+      socket.emit('message', {
+         data: {
+            user: { name: 'admin' },
+            message: `${name}, welcome to room ${room}`,
+         },
+      })
+      socket.broadcast.to(user.room).emit('message', {
+         data: {
+            user: 'admin',
+            message: `${user.name} has joined!`,
+         },
+      })
+   })
 
    io.on('disconnect', () => {
       console.log('user  disconnected')
