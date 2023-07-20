@@ -3,7 +3,7 @@ import io from "socket.io-client";
 
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-// import EmojiPicker from "emoji-picker-react";
+import EmojiPicker from "emoji-picker-react";
 
 import Messages from "../Messages/Messages";
 
@@ -13,15 +13,15 @@ const socket = io.connect("http://localhost:3000");
 
 function Chat() {
  const { search } = useLocation();
-//  const [params, setParams] = useState({ room: "", name: "" });
+ const [params, setParams] = useState({ room: "", name: "" });
  const [state, setState] = useState([]);
-//  const [text, setText] = useState("");
-//  const [message, setMessage] = useState("");
+  const [text, setText] = useState("");
+  const [message, setMessage] = useState("");
  const [isOpenEmoji, setisOpenEmoji] = useState(false);
 
  useEffect(() => {
   const searchParams = Object.fromEntries(new URLSearchParams(search));
-//   setParams(searchParams);
+  setParams(searchParams);
   socket.emit("join", searchParams);
  }, [search]);
 
@@ -31,26 +31,26 @@ function Chat() {
   });
  }, []);
 
-//  const handleSubmit = (e) => {
-//   setText(text);
-//   socket.emit("message", { text });
-//   setText("");
-//  };
+  const handleSubmit = (e) => {
+   setText(text);
+   socket.emit("message", { text });
+   setText("");
+  };
 
-//  const handleChange = ({ target: { value } }) => {
-//   setText(value);
-//  };
+  const handleChange = ({ target: { value } }) => {
+   setText(value);
+  };
 
-//  const onEmojiClick = ({ emoji }) => {
-//   setMessage(`${message}  ${emoji}`);
-//  };
+  const onEmojiClick = ({ emoji }) => {
+   setMessage(`${message}  ${emoji}`);
+  };
 
  return (
   <section>
-   <Messages messages={state} />
+   <Messages params={params.name} messages={state} />
    <form className={s.chat__form}>
     <Link to="/">Back</Link>
-    {/* <input
+    <input
        type="text"
        name="message"
        placeholder="Message"
@@ -58,7 +58,7 @@ function Chat() {
        className={s.chat__input}
        onChange={handleChange}
        value={text}
-      /> */}
+      />
     <div className={s.emoji}>
      <button
       className={s.emoji__button}
@@ -68,14 +68,14 @@ function Chat() {
       😀
      </button>
     </div>
-    {/* {isOpenEmoji && (
+    {isOpenEmoji && (
        <div className={s.emoji__container}>
         <EmojiPicker onEmojiClick={onEmojiClick} />
        </div>
-      )} */}
-    {/* <button type="submit" className={s.chat__button} onClick={handleSubmit}>
+      )}
+    <button type="submit" className={s.chat__button} onClick={handleSubmit}>
        Send a message
-      </button> */}
+      </button>
    </form>
   </section>
  );

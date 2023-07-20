@@ -4,8 +4,9 @@ import React from "react";
 
 import s from "./Messages.module.css";
 
-function Messages({ messages }) {
+function Messages({ messages, name }) {
  console.log(messages);
+ console.log(name);
  return (
   <div className={s.messageContainer}>
    <h1 className={s.message_header}>header</h1>
@@ -14,8 +15,11 @@ function Messages({ messages }) {
      console.log(user);
      console.log(message);
      return (
-      <section className={s.messageBox}>
-       <h1>{user.name}</h1>
+		 <section
+			 key={index}
+			 className={s.messageBox}
+		 >
+			 <h1>{user.name}</h1>
        <h1 className={s.sentText}>{message}</h1>
       </section>
      );
